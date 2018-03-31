@@ -47,21 +47,45 @@ As Boolean
 ' If the pattern token/delimiter/token occurs in the line, return true, else return false
 
     'First do the easy thing - if the requested delimiter does not occur in the target string,
-    'return count of 0
+    'return False (delimter not found)
     If (InStr(Line, delimiter) = 0) Then
-        TokenDelimiterTokenFoundInLine = 0
+        TokenDelimiterTokenFoundInLine = False
+        Debug.Print "Did not find the delimter, returning false"
+        
         Exit Function
     End If
 
     'delimiter was found, now get the tokens before and after
     Dim tokenSet() As String
+    Dim delimIndex  As Integer
+    
     
     tokenSet = Split(Line)
     Debug.Print Line
-    Debug.Print tokenSet(1)
+
+    Dim x As Variant
+    For Each x In tokenSet
+        Debug.Print delimIndex & "[" & x & "]"
+        If x = delimiter Then
+            Debug.Print "got the delimiter at index " & delimIndex
+            Debug.Print "Value is:" & tokenSet(delimIndex)
+            'Now test the preceding and next tokens. If they are the same then return true
+            If tokenSet(delimIndex - 1) = tokenSet(delimIndex + 1) Then
+                TokenDelimiterTokenFoundInLine = True
+                Debug.Print "Found the token and pre and post"
+            Else
+                TokenDelimiterTokenFoundInLine = False
+                Debug.Print "Found the delim, but pre and post did not match"
+            End If
+            Exit Function
+            
+        End If
+        
+        delimIndex = delimIndex + 1
+    Next
     
     
-    Dim x As Boolean
+    
     x = True
     
     
@@ -71,3 +95,4 @@ As Boolean
 
 
 End Function
+
