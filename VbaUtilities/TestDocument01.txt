@@ -1,0 +1,8 @@
+The delimiter passed to the parsing function is user-defined. For the test cases below it is assumed that ":" is the passed delimiter.
+This is control line 1 : note that no word is repeated
+This is control line 2 ; note that no word is repeated and the delimiter has changed
+Coffee Tea FishAndChips             :         FishAndChips Pudding More Tea
+Coffee Tea FishAndChips : FishAndChips Pudding More Tea
+Coffee Tea FishAndChips:FishAndChips Pudding More Tea
+Coffee Tea FishAndChips;FishAndChips Pudding More Tea
+This is control line 3: the last for now.
