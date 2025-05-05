@@ -46,9 +46,10 @@ End Sub
 ' If a paragraph uses one of these fonts, it sets the font size to 9pt and the background color to black.
 ' It also adds a border around the paragraph.
 ' The macro counts the number of paragraphs modified and displays a message box with the count.
+' There is one version for the whole document and another for the selection.
 
 
-Sub StyleCodeBlocks()
+Sub StyleCodeBlocksInDocument()
     Dim r As Range
     Dim changedCount As Integer
     Dim para As Paragraph
@@ -56,11 +57,37 @@ Sub StyleCodeBlocks()
 
     For Each para In ActiveDocument.Paragraphs
         Set r = para.Range
-        ' Check for monospaced fonts (Courier New, Consolas, or Cascadia Code)
+        ' Check for monospaced fonts
         If r.Font.Name = "Courier New" Or r.Font.Name = "Consolas" Or r.Font.Name = "Cascadia Code" Then
-            r.Font.Size = 9 
-            r.Shading.BackgroundPatternColor = wdColorBlack 
-            ' Optional: Add border to the paragraph range
+            r.Font.Size = 9
+            r.Shading.BackgroundPatternColor = wdColorBlack
+            r.Borders.Enable = True
+            r.Borders.OutsideLineStyle = wdLineStyleSingle
+            r.Borders.OutsideColor = wdColorOrange
+            changedCount = changedCount + 1
+        End If
+    Next para
+
+    MsgBox changedCount & " code block(s) styled.", vbInformation, "Done"
+End Sub
+
+Sub StyleCodeBlocksInSelection()
+    Dim r As Range
+    Dim changedCount As Integer
+    Dim para As Paragraph
+    changedCount = 0
+
+    If Selection.Type <> wdSelectionNormal Then
+        MsgBox "Please select some text first.", vbExclamation, "No Selection"
+        Exit Sub
+    End If
+
+    For Each para In Selection.Paragraphs
+        Set r = para.Range
+        ' Check for monospaced fonts
+        If r.Font.Name = "Courier New" Or r.Font.Name = "Consolas" Or r.Font.Name = "Cascadia Code" Then
+            r.Font.Size = 9
+            r.Shading.BackgroundPatternColor = wdColorBlack
             r.Borders.Enable = True
             r.Borders.OutsideLineStyle = wdLineStyleSingle
             r.Borders.OutsideColor = wdColorBlack
@@ -68,5 +95,6 @@ Sub StyleCodeBlocks()
         End If
     Next para
 
-    MsgBox changedCount & " code block(s) styled.", vbInformation, "Done"
+    MsgBox changedCount & " code block(s) styled in selection.", vbInformation, "Done"
 End Sub
+
