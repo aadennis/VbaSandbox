@@ -15,7 +15,7 @@ Sub InsertLocalPathAndPageNumbersFormatted()
 
     ' Extract from "Documents/" onward using regex
     Set regex = CreateObject("VBScript.RegExp")
-    regex.Pattern = "Documents/.*"
+    regex.pattern = "Documents/.*"
     regex.IgnoreCase = True
     regex.Global = False
 
@@ -30,18 +30,9 @@ Sub InsertLocalPathAndPageNumbersFormatted()
     For Each sec In ActiveDocument.Sections
         Set footerRange = sec.Footers(wdHeaderFooterPrimary).Range
         With footerRange
-            .Text = "" ' Clear existing footer content
+            .text = "" ' Clear existing footer content
             .ParagraphFormat.TabStops.ClearAll
             .ParagraphFormat.TabStops.Add Position:=tabPos, Alignment:=wdAlignTabRight
-
-            ' Insert a thin horizontal line (bottom border of the first paragraph)
-            .ParagraphFormat.Borders(wdBorderTop).LineStyle = wdLineStyleSingle
-            .ParagraphFormat.Borders(wdBorderTop).LineWidth = wdLineWidth025pt
-            .ParagraphFormat.Borders(wdBorderTop).Color = wdColorAutomatic
-
-            ' Move to next paragraph for footer content
-            .InsertParagraphAfter
-            .Collapse wdCollapseEnd
 
             ' Insert path (left) and tab + page numbering (right)
             .InsertAfter docPath & vbTab & "Page "
@@ -55,3 +46,5 @@ Sub InsertLocalPathAndPageNumbersFormatted()
         End With
     Next sec
 End Sub
+
+
