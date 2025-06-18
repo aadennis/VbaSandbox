@@ -3,17 +3,30 @@ Sub InsertLocalPathAndPageNumbersFormatted()
     Dim sec As Section
     Dim footerRange As Range
     Dim tabPos As Single
+    Dim regex As Object
+    Dim matches As Object
 
     ' Get local full path
     docPath = ActiveDocument.FullName
-    
+
+    ' Extract from "Documents/" onward using regex
+    Set regex = CreateObject("VBScript.RegExp")
+    regex.Pattern = "Documents/.*"
+    regex.IgnoreCase = True
+    regex.Global = False
+
+    If regex.Test(docPath) Then
+        Set matches = regex.Execute(docPath)
+        docPath = matches(0)
+    End If
+
     ' Define a right-aligned tab stop at the right margin
     tabPos = CentimetersToPoints(17) ' Adjust to match your page layout
 
     For Each sec In ActiveDocument.Sections
         Set footerRange = sec.Footers(wdHeaderFooterPrimary).Range
         With footerRange
-            .text = "" ' Clear existing footer content
+            .Text = "" ' Clear existing footer content
             .ParagraphFormat.TabStops.ClearAll
             .ParagraphFormat.TabStops.Add Position:=tabPos, Alignment:=wdAlignTabRight
 
