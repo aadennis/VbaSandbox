@@ -34,6 +34,15 @@ Sub InsertLocalPathAndPageNumbersFormatted()
             .ParagraphFormat.TabStops.ClearAll
             .ParagraphFormat.TabStops.Add Position:=tabPos, Alignment:=wdAlignTabRight
 
+            ' Insert a thin horizontal line (bottom border of the first paragraph)
+            .ParagraphFormat.Borders(wdBorderTop).LineStyle = wdLineStyleSingle
+            .ParagraphFormat.Borders(wdBorderTop).LineWidth = wdLineWidth025pt
+            .ParagraphFormat.Borders(wdBorderTop).Color = wdColorAutomatic
+
+            ' Move to next paragraph for footer content
+            .InsertParagraphAfter
+            .Collapse wdCollapseEnd
+
             ' Insert path (left) and tab + page numbering (right)
             .InsertAfter docPath & vbTab & "Page "
             .Fields.Add Range:=.Characters.Last, Type:=wdFieldPage
