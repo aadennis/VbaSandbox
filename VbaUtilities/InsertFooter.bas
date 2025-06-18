@@ -47,22 +47,9 @@ Sub InsertFooter()
     footerRange.Text = LCase(filePathText) ' Convert to lowercase
     footerRange.ParagraphFormat.Alignment = wdAlignParagraphLeft
 
-    ' Move to a new paragraph for the page x of y, right-aligned
-    footerRange.Collapse wdCollapseEnd
-    footerRange.InsertParagraphAfter
-    footerRange.Collapse wdCollapseEnd
-    footerRange.ParagraphFormat.Alignment = wdAlignParagraphRight
-
-    ' Insert "Page { PAGE } of { NUMPAGES }"
-    footerRange.InsertAfter "Page "
-    footerRange.Collapse wdCollapseEnd
-    footerRange.Fields.Add footerRange, wdFieldPage
-    footerRange.Collapse wdCollapseEnd
-    footerRange.InsertAfter " of "
-    footerRange.Collapse wdCollapseEnd
-    footerRange.Fields.Add footerRange, wdFieldNumPages
-
-    ' Optionally, update all fields in the footer to ensure display
+    ' Update fields
     footerRange.Fields.Update
+
+    InsertHeaderPageNumber()
 End Sub
 
