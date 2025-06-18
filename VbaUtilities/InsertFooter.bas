@@ -1,5 +1,12 @@
 Sub InsertFooter()
-    ' Insert a footer with the full document path in lowercase, left-aligned
+    ' Insert a footer with the document path in lowercase, left-aligned.
+    ' That path is the full path of the document, starting from '/Documents/',
+    ' and excludes the root directory.
+
+    ' Delete any existing footer first
+    ActiveDocument.Sections(1).Footers(wdHeaderFooterPrimary).Range.Delete
+    MsgBox "Any existing Footer deleted successfully.", vbInformation
+
     Dim filePathField As Field 
     Dim footerRange As Range
     Dim mySection As Section
