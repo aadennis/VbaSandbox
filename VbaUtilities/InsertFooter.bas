@@ -4,8 +4,10 @@ Sub InsertFooter()
     ' and excludes the root directory.
 
     ' Delete any existing footer first
-    ActiveDocument.Sections(1).Footers(wdHeaderFooterPrimary).Range.Delete
-    MsgBox "Any existing Footer deleted successfully.", vbInformation
+    If Len(ActiveDocument.Sections(1).Footers(wdHeaderFooterPrimary).Range.Text) > 1 Then
+        ActiveDocument.Sections(1).Footers(wdHeaderFooterPrimary).Range.Delete
+        MsgBox "Existing footer deleted.", vbInformation
+    End If
 
     Dim filePathField As Field 
     Dim footerRange As Range
