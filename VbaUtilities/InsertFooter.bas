@@ -47,7 +47,14 @@ Sub InsertFooter()
     footerRange.text = LCase(filePathText) ' Convert to lowercase
     footerRange.ParagraphFormat.Alignment = wdAlignParagraphLeft
 
-    ' Add a line break before inserting the page number fields
+    ' Add a line break, then insert the page number x of y fields, right-aligned
+    footerRange.InsertParagraphAfter
+    footerRange.Collapse wdCollapseEnd
+    footerRange.ParagraphFormat.Alignment = wdAlignParagraphRight
+    footerRange.Fields.Add footerRange, wdFieldPage
+    footerRange.InsertAfter " of "
+    footerRange.Fields.Add footerRange, wdFieldNumPages
+
     
 End Sub
 
