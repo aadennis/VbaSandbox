@@ -9,7 +9,7 @@ Sub InsertFooter()
         MsgBox "Existing footer deleted.", vbInformation
     End If
 
-    Dim filePathField As Field 
+    Dim filePathField As Field
     Dim footerRange As Range
     Dim mySection As Section
     Set mySection = ActiveDocument.Sections(1)
@@ -18,21 +18,21 @@ Sub InsertFooter()
     Set footerRange = mySection.Footers(wdHeaderFooterPrimary).Range
     footerRange.Font.Name = "Arial"
     footerRange.Font.Size = 9
-    footerRange.text = ""
+    footerRange.Text = ""
 
     ' Insert full document path in lowercase, left-aligned
     footerRange.Collapse wdCollapseStart
-    
+
     Set filePathField = footerRange.Fields.Add(footerRange, wdFieldFileName, "\p")
     filePathField.Update
     filePathText = filePathField.Result
-    
-     ' Create RegExp object
+
+    ' Create RegExp object
     Set regex = CreateObject("VBScript.RegExp")
-    regex.pattern = "/Documents/.*"  ' Match everything from '/Documents/' onward
+    regex.Pattern = "/Documents/.*"  ' Match everything from '/Documents/' onward
     regex.IgnoreCase = True
     regex.Global = True
-    
+
     ' Execute regex and extract match
     If regex.Test(filePathText) Then
         Set match = regex.Execute(filePathText)
@@ -40,27 +40,29 @@ Sub InsertFooter()
     Else
         MsgBox "Error: '/Documents/' not found in the path.", vbExclamation
     End If
-    
+
     ' Remove the field after extracting the path
     filePathField.Delete
-    
-    footerRange.text = LCase(filePathText) ' Convert to lowercase
+
+    footerRange.Text = LCase(filePathText) ' Convert to lowercase
     footerRange.ParagraphFormat.Alignment = wdAlignParagraphLeft
 
-    ' Add a line break, then insert the page number x of y fields, right-aligned
+    ' Move to a new paragraph for the page x of y, right-aligned
+    footerRange.Collapse wdCollapseEnd
     footerRange.InsertParagraphAfter
     footerRange.Collapse wdCollapseEnd
     footerRange.ParagraphFormat.Alignment = wdAlignParagraphRight
 
     ' Insert "Page { PAGE } of { NUMPAGES }"
-    footerRange.Text = "Page "
+    footerRange.InsertAfter "Page "
     footerRange.Collapse wdCollapseEnd
     footerRange.Fields.Add footerRange, wdFieldPage
     footerRange.Collapse wdCollapseEnd
-    footerRange.Text = " of "
+    footerRange.InsertAfter " of "
     footerRange.Collapse wdCollapseEnd
     footerRange.Fields.Add footerRange, wdFieldNumPages
 
-    
+    ' Optionally, update all fields in the footer to ensure display
+    footerRange.Fields.Update
 End Sub
 
