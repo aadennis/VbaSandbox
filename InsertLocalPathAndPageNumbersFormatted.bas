@@ -36,6 +36,11 @@ Sub InsertLocalPathAndPageNumbersFormatted()
             .ParagraphFormat.TabStops.ClearAll
             .ParagraphFormat.TabStops.Add Position:=tabPos, Alignment:=wdAlignTabRight
 
+            ' Add a horizontal line above using paragraph border
+            .ParagraphFormat.Borders(wdBorderTop).LineStyle = wdLineStyleSingle
+            .ParagraphFormat.Borders(wdBorderTop).LineWidth = wdLineWidth050pt
+            .ParagraphFormat.Borders(wdBorderTop).Color = wdColorGray25
+
             ' Insert path (left) and tab + page numbering (right)
             .InsertAfter docPath & vbTab & "Page "
             .Fields.Add Range:=.Characters.Last, Type:=wdFieldPage
