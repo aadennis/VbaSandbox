@@ -1,8 +1,10 @@
 Sub InsertLocalPathAndPageNumbersFormatted()
     ' Insert a footer with the local document path and page numbers formatted.
-    ' The folder path is left-deleted, due to OneDrive sync issues, so show only
+    ' The folder path is left-deleted, due to OneDrive sync issues*, so show only
     ' the path from "Documents/" onward, and format the footer with a right-aligned
     ' tab stop for the page numbers.
+    ' * - OneDrive insists on retaining the web path, not the local path. Better to
+    ' limit the path to the local "Documents/" folder, regardless of the parent folder.
     Dim docPath As String
     Dim sec As Section
     Dim footerRange As Range
