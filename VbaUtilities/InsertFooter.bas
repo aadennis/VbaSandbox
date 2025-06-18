@@ -51,8 +51,14 @@ Sub InsertFooter()
     footerRange.InsertParagraphAfter
     footerRange.Collapse wdCollapseEnd
     footerRange.ParagraphFormat.Alignment = wdAlignParagraphRight
+
+    ' Insert "Page { PAGE } of { NUMPAGES }"
+    footerRange.Text = "Page "
+    footerRange.Collapse wdCollapseEnd
     footerRange.Fields.Add footerRange, wdFieldPage
-    footerRange.InsertAfter " of "
+    footerRange.Collapse wdCollapseEnd
+    footerRange.Text = " of "
+    footerRange.Collapse wdCollapseEnd
     footerRange.Fields.Add footerRange, wdFieldNumPages
 
     
