@@ -1,10 +1,10 @@
 ' This module contains macros to format text from ChatGPT responses in Word.
 Sub FormatChatGPTText()
-    Call RemoveTextBeforeYouSaid   ' Rule 1
-    Call ApplyChatStyles           ' Rule 2
+    Call RemovePreChatText   ' Rule 1
+    Call ApplyChatStyles     ' Rule 2
 End Sub
 
-Sub RemoveTextBeforeYouSaid()
+Sub RemovePreChatText()
     ' Remove all text before the first occurrence of "You said:" in the active document.
     ' It is useful for cleaning up ChatGPT responses that may have introductory text.
     ' It assumes the text "You said:" is used to indicate the start of the user's
@@ -60,9 +60,23 @@ Sub ApplyChatStyles()
                 Case "GPT"
                     On Error Resume Next
                     para.Range.Style = "GPTChat"
+                    
                     On Error GoTo 0
             End Select
         End If
     Next para
+End Sub
+Sub NewChatGPTStyledDoc()
+
+    ' Create a new document based on a predefined template for ChatGPT style rules.
+    ' Word normally expects a template file to be in the user's templates directory,
+    ' and not a folder dictated by the user. This is enforced by the Word UI, in that
+    ' other folders are not shown in the "New Document" dialog.
+    ' However, after this has run, and has created a draft new document based on that 
+    ' template, you are then in the UI, and can save the document wherever you like.
+    Dim templatePath As String
+    templatePath = "C:\Users\Dennis\AppData\Roaming\Microsoft\Templates\WordStandards\ChatGPTStyleRules.dotm"
+    
+    Documents.Add Template:=templatePath, NewTemplate:=False
 End Sub
 
