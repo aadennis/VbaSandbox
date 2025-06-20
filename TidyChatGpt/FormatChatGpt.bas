@@ -44,7 +44,7 @@ Sub ApplyChatStyles()
 
     For Each para In ActiveDocument.Paragraphs
         Dim txt As String
-        txt = Trim(para.Range.Text)
+        txt = Trim(Replace(para.Range.Text, vbCr, ""))
         
         If txt = "You said:" Then
             currentSpeaker = "User"
@@ -55,7 +55,7 @@ Sub ApplyChatStyles()
             Select Case currentSpeaker
                 Case "User"
                     On Error Resume Next
-                    para.Range.Style = "UserChat"
+                    para.Range.Style = "userChat"
                     On Error GoTo 0
                 Case "GPT"
                     On Error Resume Next
@@ -72,11 +72,12 @@ Sub NewChatGPTStyledDoc()
     ' Word normally expects a template file to be in the user's templates directory,
     ' and not a folder dictated by the user. This is enforced by the Word UI, in that
     ' other folders are not shown in the "New Document" dialog.
-    ' However, after this has run, and has created a draft new document based on that 
+    ' However, after this has run, and has created a draft new document based on that
     ' template, you are then in the UI, and can save the document wherever you like.
     Dim templatePath As String
     templatePath = "C:\Users\Dennis\AppData\Roaming\Microsoft\Templates\WordStandards\ChatGPTStyleRules.dotm"
     
     Documents.Add Template:=templatePath, NewTemplate:=False
 End Sub
+
 
