@@ -80,4 +80,23 @@ Sub NewChatGPTStyledDoc()
     Documents.Add Template:=templatePath, NewTemplate:=False
 End Sub
 
+Sub PasteWithLineBreaks()
+    ' Paste clipboard content into the active document, ensuring line breaks are preserved.
+    ' Context: This is useful when pasting text from ChatGPT or other sources where line breaks
+    ' may not be preserved correctly. The macro attempts to paste as plain text and then
+    ' fixes line breaks by replacing single line feeds with carriage return + line feed pairs.
+    Dim textRange As Range
 
+    ' Try pasting as plain text
+    On Error GoTo fallback
+    Selection.PasteSpecial DataType:=wdPasteText
+    GoTo fixBreaks
+
+fallback:
+    MsgBox "Clipboard paste failed — use Notepad workaround instead.", vbExclamation
+    Exit Sub
+
+fixBreaks:
+    Set textRange = Selection.Range
+    textRange.text = Replace(textRange.text, vbLf, vbCrLf)
+End Sub
