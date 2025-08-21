@@ -1,11 +1,22 @@
-Sub CreatePoemSlides()
+' README:
+' VsCode is the repository for this code.
+' The .pptm file is just a vehicle for presentation - it should always be possible
+' to create a working .pptm from 1. this vba code and 2. a source file containing
+' the lyrics of a given song.
+' Also note that although VsCode does syntax colouring, the code is not executable
+' from VsCode.
+
+Sub CreateSlidesForLyrics()
+    Dim fileName As String
     Dim filePath As String
+    
+    fileName = "sample_lyrics.txt" ' FILENAME CONSTANT - update this
+    filePath = ActivePresentation.Path & "\" & fileName
+
     Dim lineText As String
     Dim slide As slide
     Dim textBox As Shape
     Dim fso As Object, ts As Object
-
-    filePath = "./poem.txt" '  Update this path
 
     Set fso = CreateObject("Scripting.FileSystemObject")
     Set ts = fso.OpenTextFile(filePath, 1)
@@ -31,7 +42,7 @@ Sub SetSlideTimings()
     For Each s In ActivePresentation.Slides
         With s.SlideShowTransition
             .AdvanceOnTime = msoTrue
-            .AdvanceTime = 15
+            .AdvanceTime = 7
         End With
     Next s
 End Sub
