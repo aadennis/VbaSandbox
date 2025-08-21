@@ -6,7 +6,18 @@
 ' Also note that although VsCode does syntax colouring, the code is not executable
 ' from VsCode.
 
+Sub DeleteAllSlides()
+    Dim i As Integer
+    With ActivePresentation
+        For i = .Slides.Count To 1 Step -1
+            .Slides(i).Delete
+        Next i
+    End With
+End Sub
+
 Sub CreateSlidesForLyrics()
+    DeleteAllSlides ' Clear existing slides before generating new ones
+
     Dim fileName As String
     Dim filePath As String
     
