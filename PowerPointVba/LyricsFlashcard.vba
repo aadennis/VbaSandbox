@@ -6,6 +6,15 @@
 ' Also note that although VsCode does syntax colouring, the code is not executable
 ' from VsCode.
 
+' === CONFIGURATION BLOCK ===
+Const FILE_NAME As String = "sample_lyrics.txt"
+Const TEXTBOX_LEFT As Single = 50
+Const TEXTBOX_TOP As Single = 100
+Const TEXTBOX_WIDTH As Single = 600
+Const TEXTBOX_HEIGHT As Single = 400
+Const FONT_SIZE As Integer = 60
+
+
 Sub DeleteAllSlides()
     Dim i As Integer
     With ActivePresentation
@@ -18,11 +27,9 @@ End Sub
 Sub CreateSlidesForLyrics()
     DeleteAllSlides ' Clear existing slides before generating new ones
 
-    Dim fileName As String
     Dim filePath As String
-    
-    fileName = "sample_lyrics.txt" ' FILENAME CONSTANT - update this
-    filePath = ActivePresentation.Path & "\" & fileName
+    filePath = ActivePresentation.Path & "\" & FILE_NAME
+
 
     Dim lineText As String
     Dim slide As slide
@@ -36,11 +43,14 @@ Sub CreateSlidesForLyrics()
         lineText = ts.ReadLine
         Set slide = ActivePresentation.Slides.Add(ActivePresentation.Slides.Count + 1, ppLayoutBlank)
         Set textBox = slide.Shapes.AddTextbox(Orientation:=msoTextOrientationHorizontal, _
-                                               Left:=50, Top:=100, Width:=600, Height:=400)
+            Left:=TEXTBOX_LEFT, Top:=TEXTBOX_TOP, _
+            Width:=TEXTBOX_WIDTH, Height:=TEXTBOX_HEIGHT)
+
+
         With textBox.TextFrame.TextRange
             .Text = lineText
-            .Font.Size = 60
-            .ParagraphFormat.Alignment = ppAlignLeft
+            .Font.Size = FONT_SIZE
+            .ParagraphFormat.ALIGNMENT = ppAlignLeft
         End With
         slide.FollowMasterBackground = msoFalse
     Loop
@@ -57,4 +67,6 @@ Sub SetSlideTimings()
         End With
     Next s
 End Sub
+
+
 
