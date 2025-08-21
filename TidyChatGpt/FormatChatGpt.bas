@@ -1,7 +1,8 @@
 ' This module contains macros to format text from ChatGPT responses in Word.
 Sub FormatChatGPTText()
-    Call RemovePreChatText   ' Rule 1
-    Call ApplyChatStyles     ' Rule 2
+    Call PasteWithLineBreaks
+    Call RemovePreChatText
+    Call ApplyChatStyles
 End Sub
 
 Sub RemovePreChatText()
