@@ -1,3 +1,8 @@
+# This automates the creation of PowerPoint presentations from text files using VBA macros. 
+# It imports a VBA module (generator.bas) into a PowerPoint presentation, 
+# executes the CreatePresentationFromText macro for each text file, 
+# and saves the resulting presentations as macro-enabled PowerPoint files (.pptm).
+
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Definition
 $basPath = Join-Path $scriptDir "generator.bas"
 
