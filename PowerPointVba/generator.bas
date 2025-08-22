@@ -2,6 +2,9 @@ Option Explicit
 Const ppSaveAsOpenXMLMacroEnabled = 25
 
 Sub CreatePresentationFromText(filePath As String)
+' This automates the creation of a PowerPoint presentation from a plain text file. 
+' Each line in the text file becomes the content of a new slide in the presentation. 
+' The resulting presentation is saved as a macro-enabled PowerPoint file (.pptm).
     Dim newPres As Presentation
     Dim slideIndex As Integer
     Dim lineText As String
