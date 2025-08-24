@@ -1,7 +1,6 @@
 Option Explicit
 
 Const ppSaveAsOpenXMLMacroEnabled As Long = 25
-Const FLASHCARD_SOURCE As String = "poem.txt"
 Const TEXTBOX_LEFT As Single = 50
 Const TEXTBOX_TOP As Single = 100
 Const TEXTBOX_WIDTH As Single = 600
@@ -9,6 +8,7 @@ Const TEXTBOX_HEIGHT As Single = 400
 Const FONT_SIZE As Integer = 60
 Const FONT_NAME As String = "Calibri"
 Const ADVANCE_TIME As Integer = 12
+
 
 ' ********************************************************************************************
 ' * VBA Module
@@ -162,8 +162,40 @@ Sub SetSlideTimings()
     Next s
 End Sub
 
+Function ReadConfigValue(key As String, configPath As String) As String
+    Dim fso As Object, ts As Object, line As String, parts() As String
+    Set fso = CreateObject("Scripting.FileSystemObject")
+
+    If Not fso.FileExists(configPath) Then
+        MsgBox "Config file not found: " & configPath, vbCritical
+        End
+    End If
+
+    Set ts = fso.OpenTextFile(configPath, 1)
+    Do While Not ts.AtEndOfStream
+        line = Trim(ts.ReadLine)
+        If InStr(line, "=") > 0 Then
+            parts = Split(line, "=")
+            If UCase(Trim(parts(0))) = UCase(key) Then
+                ReadConfigValue = Trim(parts(1))
+                ts.Close
+                Exit Function
+            End If
+        End If
+    Loop
+    ts.Close
+    MsgBox "Key '" & key & "' not found in config file.", vbCritical
+    End
+End Function
+
 Sub RunLyricsAutomation()
+    Dim configPath As String
+    Dim flashcardSource As String
+
+    configPath = ActivePresentation.Path & "\config.txt"
+    flashcardSource = ReadConfigValue("FLASHCARD_SOURCE", configPath)
+
     Call DeleteAllSlides
-    Call GenerateLyricsPptm(FLASHCARD_SOURCE)
+    Call GenerateLyricsPptm(flashcardSource)
     Call SetSlideTimings
 End Sub
