@@ -1,7 +1,7 @@
 Option Explicit
 
 Const ppSaveAsOpenXMLMacroEnabled As Long = 25
-Const songForPowerpoint As String = "poem.txt"
+Const FLASHCARD_SOURCE As String = "poem.txt"
 Const TEXTBOX_LEFT As Single = 50
 Const TEXTBOX_TOP As Single = 100
 Const TEXTBOX_WIDTH As Single = 600
@@ -95,6 +95,21 @@ Sub GenerateLyricsPptm(songName As String)
     ' Create new presentation
     Set newPres = Presentations.Add(msoTrue)
 
+    ' Add intro slide with source metadata
+    Dim introSlide As Slide
+    Set introSlide = newPres.Slides.Add(1, ppLayoutText)
+
+    With introSlide.Shapes(1).TextFrame.TextRange
+        .Text = songName
+        .Font.Name = FONT_NAME
+        .Font.Size = FONT_SIZE
+        .ParagraphFormat.Alignment = ppAlignCenter
+    End With
+
+    On Error Resume Next
+    introSlide.Shapes(2).Delete
+    On Error GoTo 0
+
     ' Add slides for each line
     For Each line In lines
         Set slide = newPres.Slides.Add(newPres.Slides.Count + 1, ppLayoutBlank)
@@ -125,6 +140,6 @@ End Sub
 
 Sub RunLyricsAutomation()
     Call DeleteAllSlides
-    Call GenerateLyricsPptm(songForPowerpoint)
+    Call GenerateLyricsPptm(FLASHCARD_SOURCE)
 End Sub
 
