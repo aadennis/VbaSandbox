@@ -112,26 +112,39 @@ Sub GenerateLyricsPptm(songName As String)
     On Error GoTo 0
 
     ' Add slides for each line
-    For Each line In lines
+    Dim i As Integer
+    For i = 1 To lines.Count
+        ' Add lyric slide
         Set slide = newPres.Slides.Add(newPres.Slides.Count + 1, ppLayoutBlank)
         Set shp = slide.Shapes.AddTextbox(Orientation:=msoTextOrientationHorizontal, _
             Left:=TEXTBOX_LEFT, Top:=TEXTBOX_TOP, _
             Width:=TEXTBOX_WIDTH, Height:=TEXTBOX_HEIGHT)
-    With shp.TextFrame
-        .TextRange.Text = line
-        .TextRange.ParagraphFormat.Alignment = ppAlignCenter
-        .TextRange.Font.Size = FONT_SIZE
-        .TextRange.Font.Name = FONT_NAME
-        .AutoSize = ppAutoSizeShapeToFitText
-    End With
-    
+        With shp.TextFrame
+            .TextRange.Text = lines(i)
+            .TextRange.ParagraphFormat.Alignment = ppAlignCenter
+            .TextRange.Font.Size = FONT_SIZE
+            .TextRange.Font.Name = FONT_NAME
+            .AutoSize = ppAutoSizeShapeToFitText
+        End With
         ' Center shape manually
         shp.Left = (newPres.PageSetup.SlideWidth - shp.Width) / 2
         shp.Top = (newPres.PageSetup.SlideHeight - shp.Height) / 2
         ' Set slide timing
         slide.SlideShowTransition.AdvanceOnTime = msoTrue
-        slide.SlideShowTransition.AdvanceTime = 5
-    Next line
+        slide.SlideShowTransition.AdvanceTime = ADVANCE_TIME
+    
+        ' Add separator slide
+        Set slide = newPres.Slides.Add(newPres.Slides.Count + 1, ppLayoutBlank)
+        Set shp = slide.Shapes.AddShape(Type:=msoShapeRectangle, _
+            Left:=0, Top:=newPres.PageSetup.SlideHeight / 2 - 10, _
+            Width:=newPres.PageSetup.SlideWidth, Height:=20)
+        With shp
+            .Fill.ForeColor.RGB = RGB(0, 0, 0) ' Black line
+            .line.Visible = msoFalse
+        End With
+        slide.SlideShowTransition.AdvanceOnTime = msoTrue
+        slide.SlideShowTransition.AdvanceTime = ADVANCE_TIME
+    Next i
 
     ' Save as pptm
     newPres.SaveAs outputName, ppSaveAsOpenXMLMacroEnabled
@@ -154,6 +167,3 @@ Sub RunLyricsAutomation()
     Call GenerateLyricsPptm(FLASHCARD_SOURCE)
     Call SetSlideTimings
 End Sub
-
-
-
