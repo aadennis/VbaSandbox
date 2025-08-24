@@ -88,8 +88,8 @@ Sub GenerateLyricsPptm(songName As String)
     Set ts = fso.OpenTextFile(songPath, 1)
     Set lines = New Collection
     Do While Not ts.AtEndOfStream
-        lineText = Trim(ts.ReadLine)
-        If Len(lineText) > 0 Then lines.Add lineText
+        lineText = ts.ReadLine
+        If IsLyricLine(lineText) Then lines.Add Trim(lineText)
     Loop
     ts.Close
 
@@ -161,7 +161,50 @@ Sub SetSlideTimings()
         End With
     Next s
 End Sub
+Function IsBlankLine(lineText As String) As Boolean
+    IsBlankLine = (Len(Trim(lineText)) = 0)
+End Function
+Function IsChordLine(lineText As String) As Boolean
+    Dim knownChords As Variant
+    knownChords = Array("A", "B", "C", "D", "E", "F", "G", _
+                        "Am", "Bm", "Cm", "Dm", "Em", "Fm", "Gm", _
+                        "A7", "B7", "C7", "D7", "E7", "F7", "G7", _
+                        "Amaj7", "C#m", "F#m", "G#7", "Dmaj7") ' Expand as needed
 
+    Dim tokens() As String
+    Dim token As String
+    Dim matchCount As Integer
+    Dim i As Integer, j As Integer
+
+    lineText = Trim(lineText)
+    If Len(lineText) = 0 Then
+        IsChordLine = False
+        Exit Function
+    End If
+
+    tokens = Split(lineText)
+    matchCount = 0
+
+    For i = LBound(tokens) To UBound(tokens)
+        token = Replace(tokens(i), "-", "") ' Remove dashes
+        token = Replace(token, "–", "")     ' Remove en-dashes
+        token = Replace(token, "—", "")     ' Remove em-dashes
+        token = Trim(token)
+
+        For j = LBound(knownChords) To UBound(knownChords)
+            If StrComp(token, knownChords(j), vbTextCompare) = 0 Then
+                matchCount = matchCount + 1
+                Exit For
+            End If
+        Next j
+    Next i
+
+    IsChordLine = (matchCount >= 2)
+End Function
+
+Function IsLyricLine(lineText As String) As Boolean
+    IsLyricLine = (Not IsBlankLine(lineText)) And (Not IsChordLine(lineText))
+End Function
 Function ReadConfigValue(key As String, configPath As String) As String
     Dim fso As Object, ts As Object, line As String, parts() As String
     Set fso = CreateObject("Scripting.FileSystemObject")
