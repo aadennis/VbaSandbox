@@ -2,11 +2,25 @@ Option Explicit
 
 Const ppSaveAsOpenXMLMacroEnabled As Long = 25
 Const songForPowerpoint As String = "poem.txt"
+Const TEXTBOX_LEFT As Single = 50
+Const TEXTBOX_TOP As Single = 100
+Const TEXTBOX_WIDTH As Single = 600
+Const TEXTBOX_HEIGHT As Single = 400
+Const FONT_SIZE As Integer = 60
+Const FONT_NAME As String = "Calibri"
 
+Sub DeleteAllSlides()
+    Dim i As Integer
+    With ActivePresentation
+        For i = .Slides.Count To 1 Step -1
+            .Slides(i).Delete
+        Next i
+    End With
+End Sub
 
 Sub GenerateLyricsPptm(songName As String)
-' This automates the creation of a PowerPoint presentation from a plain text file. 
-' Each line in the text file becomes the content of a new slide in the presentation. 
+' This automates the creation of a PowerPoint presentation from a plain text file.
+' Each line in the text file becomes the content of a new slide in the presentation.
 ' The resulting presentation is saved as a macro-enabled PowerPoint file (.pptm).
     Dim fso As Object, ts As Object
     Dim lineText As String, lines As Collection
@@ -44,12 +58,13 @@ Sub GenerateLyricsPptm(songName As String)
     For Each line In lines
         Set slide = newPres.Slides.Add(newPres.Slides.Count + 1, ppLayoutBlank)
         Set shp = slide.Shapes.AddTextbox(Orientation:=msoTextOrientationHorizontal, _
-                                          Left:=50, Top:=100, Width:=600, Height:=400)
+            Left:=TEXTBOX_LEFT, Top:=TEXTBOX_TOP, _
+            Width:=TEXTBOX_WIDTH, Height:=TEXTBOX_HEIGHT)
     With shp.TextFrame
         .TextRange.Text = line
         .TextRange.ParagraphFormat.Alignment = ppAlignCenter
-        .TextRange.Font.Size = 44
-        .TextRange.Font.Name = "Calibri"
+        .TextRange.Font.Size = FONT_SIZE
+        .TextRange.Font.Name = FONT_NAME
         .AutoSize = ppAutoSizeShapeToFitText
     End With
     
@@ -68,6 +83,7 @@ Sub GenerateLyricsPptm(songName As String)
 End Sub
 
 Sub RunLyricsAutomation()
+    Call DeleteAllSlides
     Call GenerateLyricsPptm(songForPowerpoint)
 End Sub
 
