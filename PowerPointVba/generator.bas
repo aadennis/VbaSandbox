@@ -8,25 +8,26 @@ Const TEXTBOX_WIDTH As Single = 600
 Const TEXTBOX_HEIGHT As Single = 400
 Const FONT_SIZE As Integer = 60
 Const FONT_NAME As String = "Calibri"
+Const ADVANCE_TIME As Integer = 12
 
 ' ********************************************************************************************
-' * VBA Module                                                                               
-' *                                                                                          
-' * Purpose:         
+' * VBA Module
+' *
+' * Purpose:
 ' * The main function of this module is to generate Flashcards as part of a PPTM.
 ' * Typically, its job is to help remember song lyrics, by starting with a delay of n seconds,
-' * then presenting a line - did you remember the line? 
+' * then presenting a line - did you remember the line?
 ' * More formally...
-' * This module automates the creation of PowerPoint presentations from plain text files.    
-' * Each line in the text file becomes the content of a new slide in the presentation.       
-' * The resulting presentation is saved as a macro-enabled PowerPoint file (.pptm).          
-' *                                                                                          
-' * Workflow Overview:                                                                       
-' * 1. **Delete Existing Slides**:                                                          
+' * This module automates the creation of PowerPoint presentations from plain text files.
+' * Each line in the text file becomes the content of a new slide in the presentation.
+' * The resulting presentation is saved as a macro-enabled PowerPoint file (.pptm).
+' *
+' * Workflow Overview:
+' * 1. **Delete Existing Slides**:
 ' *    - The `DeleteAllSlides` subroutine removes all slides from the active presentation.  *
 ' *                                                                                         *
-' * 2. **Generate New Presentation**:                                                       
-' *    - The `GenerateLyricsPptm` subroutine performs the following steps:                  
+' * 2. **Generate New Presentation**:
+' *    - The `GenerateLyricsPptm` subroutine performs the following steps:
 ' *      a. Reads the specified text file line by line.                                      *
 ' *      b. Creates a new PowerPoint presentation.                                           *
 ' *      c. Adds a new slide for each line of text, inserting the text into a centered       *
@@ -96,7 +97,7 @@ Sub GenerateLyricsPptm(songName As String)
     Set newPres = Presentations.Add(msoTrue)
 
     ' Add intro slide with source metadata
-    Dim introSlide As Slide
+    Dim introSlide As slide
     Set introSlide = newPres.Slides.Add(1, ppLayoutText)
 
     With introSlide.Shapes(1).TextFrame.TextRange
@@ -138,8 +139,21 @@ Sub GenerateLyricsPptm(songName As String)
     MsgBox "Presentation saved as " & outputName, vbInformation
 End Sub
 
+Sub SetSlideTimings()
+    Dim s As slide
+    For Each s In ActivePresentation.Slides
+        With s.SlideShowTransition
+            .AdvanceOnTime = msoTrue
+            .AdvanceTime = ADVANCE_TIME
+        End With
+    Next s
+End Sub
+
 Sub RunLyricsAutomation()
     Call DeleteAllSlides
     Call GenerateLyricsPptm(FLASHCARD_SOURCE)
+    Call SetSlideTimings
 End Sub
+
+
 
