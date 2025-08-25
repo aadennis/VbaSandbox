@@ -247,8 +247,6 @@ End Function
 
 Sub RunLyricsAutomation()
     Dim flashcardSource As String
-
-    ' Get the flashcard source using the new function
     flashcardSource = GetFlashcardSource()
 
     Call DeleteAllSlides
