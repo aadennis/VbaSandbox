@@ -161,9 +161,11 @@ Sub SetSlideTimings()
         End With
     Next s
 End Sub
+
 Function IsBlankLine(lineText As String) As Boolean
     IsBlankLine = (Len(Trim(lineText)) = 0)
 End Function
+
 Function IsChordLine(lineText As String) As Boolean
     Dim knownChords As Variant
     knownChords = Array("A", "B", "C", "D", "E", "F", "G", _
@@ -205,6 +207,7 @@ End Function
 Function IsLyricLine(lineText As String) As Boolean
     IsLyricLine = (Not IsBlankLine(lineText)) And (Not IsChordLine(lineText))
 End Function
+
 Function ReadConfigValue(key As String, configPath As String) As String
     Dim fso As Object, ts As Object, line As String, parts() As String
     Set fso = CreateObject("Scripting.FileSystemObject")
@@ -231,12 +234,22 @@ Function ReadConfigValue(key As String, configPath As String) As String
     End
 End Function
 
-Sub RunLyricsAutomation()
+Function GetFlashcardSource() As String
+    ' Retrieves the flashcard source from the config file.
     Dim configPath As String
     Dim flashcardSource As String
 
     configPath = ActivePresentation.Path & "\config.txt"
     flashcardSource = ReadConfigValue("FLASHCARD_SOURCE", configPath)
+    
+    GetFlashcardSource = flashcardSource
+End Function
+
+Sub RunLyricsAutomation()
+    Dim flashcardSource As String
+
+    ' Get the flashcard source using the new function
+    flashcardSource = GetFlashcardSource()
 
     Call DeleteAllSlides
     Call GenerateLyricsPptm(flashcardSource)
