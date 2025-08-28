@@ -1,14 +1,10 @@
 # Orchestration
-## Why I tried and then abandoned PowerShell for the orchestration of VBA generation
+## Why I Tried and Then Abandoned PowerShell for Orchestrating VBA Generation
 
-I had naively thought that PowerShell would be useful for orchestrating the batch-generation of VBA objects, specifically multiple PowerPoint objects using a template. My thinking was that, well, they are both flagship Microsoft products. However, they simply do not play nicely together, and it is not possible, in any practical way, to debug from PowerShell into VBA. So I gave up.
+At first, I thought PowerShell would be a good choice for orchestrating the batch-generation of VBA objects, particularly for creating multiple PowerPoint presentations using a template. After all, both PowerShell and VBA are flagship Microsoft technologies, so I assumed they would work seamlessly together. Experience proved me wrong.
 
-Putting some specifics on that:
-Tighter Integration with PowerPoint: VBA provides direct integration with PowerPoint's object model, making it easier to manipulate presentations, slides, and shapes without needing to rely on external scripts or COM interop.
+The biggest challenge was debugging. While I could debug PowerShell scripts and VBA macros individually, debugging the integrated workflow between the two was impractical. This made troubleshooting errors frustrating and time-consuming.
 
-Simplified Workflow: Using VBA allows you to keep all the logic and automation within the PowerPoint environment, reducing the need for external dependencies or additional setup steps.
+Plus, VBA has tighter integration with the PowerPoint object model, allowing direct manipulation of slides, shapes, and presentations. By keeping all the logic within the PowerPoint environment, I could simplify the workflow, avoid external dependencies, and make the solution easier to distribute. Embedding the VBA code directly into the PowerPoint file also meant that users don't need to install or configure PowerShell.
 
-Ease of Distribution: A VBA-based solution can be embedded directly into a PowerPoint file, making it easier to share and execute without requiring users to install or configure PowerShell.
-
-Error Handling and Debugging: Debugging VBA code within the PowerPoint environment is more straightforward than troubleshooting PowerShell scripts: I can debug PowerShell, I can debug VBA. But debugging the integrated whole? Nah.
-
+In the end, while PowerShell is a powerful tool, it wasn’t the right fit for this task. VBA provided a more streamlined, integrated, and maintainable solution for automating PowerPoint generation.
