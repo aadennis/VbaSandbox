@@ -7,4 +7,13 @@ The biggest headache was debugging. While I could debug PowerShell scripts and V
 
 On top of that, VBA is much better integrated with PowerPoint. It lets you directly work with slides, shapes, and presentations without needing to rely on external scripts. Keeping everything inside PowerPoint made the workflow simpler, got rid of extra dependencies, and made it easier to share the solution. By embedding the VBA code directly into the PowerPoint file, I didn’t have to worry about users installing or setting up PowerShell.
 
+
 In the end, PowerShell is a powerful tool, but it just wasn’t the right fit for this job. VBA turned out to be a cleaner, more integrated, and easier-to-maintain solution for automating PowerPoint generation.
+
+### alt-F8 - Run macro
+### alt-F11 - Open VBA editor
+
+### Workflow for `Flashcards` in `PowerPointVba`:
+
+![FlashcardsFlow](https://github.com/user-attachments/assets/f433367a-c7a3-40d9-a20b-02c87bee7c29)
+
